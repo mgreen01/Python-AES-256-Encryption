@@ -1,7 +1,7 @@
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 
-key = b'mysecertpassword'
+key = b'mysecretpassword'
 
 with open('cipher_file', 'rb') as c_file:
 	iv = c_file.read(16)
