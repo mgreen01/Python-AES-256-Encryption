@@ -1,13 +1,8 @@
-import json
-from base64 import b64decode
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
+file_in = open("encryptedfile.bin", "rb")
+nonce, tag, ciphertext = [ file_in.read(x) for x in (32, 32, -1)]
 
-try:
-	b64 = json.loads(json_input)
-	nonce = b64decode(b64['nonce'])
-	ct = b64decode(b64['ciphertext'])
-	cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)
-	pt = cipher.decrypt(ct)
-	print("The message was: ", pt)
-#except ValueError, KeyError:
-#     print("Incorrect decryption")
+
+cipher = AES.new(key, AES.MODE_EAX, nonce)
+data = cipher.decrypt_and_verify(ciphertext, tag)
+print(data.decode('UTF-8'))

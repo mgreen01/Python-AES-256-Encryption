@@ -1,10 +1,11 @@
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 
-key = b'mysecretpassword'
+with open('key_file', 'rb') as c_file:
+    key = c_file.read()
 
 with open('cipher_file', 'rb') as c_file:
-	iv = c_file.read(16)
+	iv = c_file.read(32)
 	ciphertext = c_file.read()
 
 cipher = AES.new(key, AES.MODE_CBC, iv)
