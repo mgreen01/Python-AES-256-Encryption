@@ -1,15 +1,10 @@
 from Crypto.Cipher import AES
-from Crypto.Util.Padding import unpad
+file_in = open("encryptedfile.bin", "rb")
+nonce, tag, ciphertext = [ file_in.read(x) for x in (16, 16, -1)]
 
-with open('key_file', 'rb') as c_file:
-    key = c_file.read()
-
-with open('cipher_file', 'rb') as c_file:
-	iv = c_file.read(32)
-	ciphertext = c_file.read()
-
-cipher = AES.new(key, AES.MODE_CBC, iv)
-
-plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
-
-print(plaintext)
+with open("key.bin", "rb") as c_file:
+	key = c_file.read()
+	
+cipher = AES.new(key, AES.MODE_EAX, nonce)
+data = cipher.decrypt_and_verify(ciphertext, tag)
+print(data.decode('UTF-8'))

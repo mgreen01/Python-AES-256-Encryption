@@ -1,19 +1,27 @@
 #PyCryptodome library import
 from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
 from Crypto.Random import get_random_bytes
-#32 byte * 8 = 128-bit Encryption Key
-key = get_random_bytes(32)
-#Encryption Cipher and Encryption Mode = Cipher Block Chaining
-cipher = AES.new(key,AES.MODE_CBC)
-#Converts plaintext to bytes for encryption
-plaintext = b'this is a message'
-#The pad variable pads the plaintext into multiples of 128-bits
-ciphertext = cipher.encrypt(pad(plaintext,AES.block_size))
-#Saves the ciphertext and the padding to make sure that the cipher text fits wihtin the 128-bit limit
-with open('key_file', 'wb') as c_file:
-    c_file.write(key)
 
-with open('cipher_file', 'wb') as c_file:
-	c_file.write(cipher.iv)
-	c_file.write(ciphertext)
+plaintext
+plaintext = b'this is a message'
+#32 byte * 8 = 256-bit Encryption Key
+key = get_random_bytes(32)
+#Encryption Cipher and Encryption Mode = Encrypt then authenticate then translate (EAX_mode
+cipher = AES.new(key,AES.MODE_EAX)
+ciphertext, tag = cipher.encrypt_and_digest(plaintext)
+#Converts plaintext to bytes for encryption
+
+#The pad variable pads the plaintext into multiples of 128-bits
+
+#Saves the ciphertext and the padding to make sure that the cipher text fits wihtin the 128-bit limit
+
+with open("key.bin","wb")as c_file:
+	c_file.write(key)
+
+
+
+
+
+file_out = open ("encryptedfile.bin", "wb")
+[ file_out.write(x) for x in (cipher.nonce, tag, ciphertext) ]
+file_out.close()
